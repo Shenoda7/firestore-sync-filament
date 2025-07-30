@@ -20,7 +20,7 @@ A Laravel-based solution that synchronizes data from Google Firestore to MySQL a
 
 ### Data Flow Architecture
 ```
-Firestore Document Change
+Manual Sync Command
          ↓
    REST API Request
          ↓
@@ -40,9 +40,9 @@ Firestore Document Change
 │   Database      │    │                  │    │   Admin Panel   │
 │                 │    │                  │    │                 │
 │ • NoSQL Docs    │◄──▶│ • Sync Command   │◄──▶│ • UserResource  │
-│ • Collections   │    │ • Webhook Ctrl   │    │ • Data Tables   │
-│ • Real-time     │    │ • Queue Jobs     │    │ • CRUD Ops      │
-│   Updates       │    │ • Transformers   │    │ • Real-time     │
+│ • Collections   │    │ • Transformers   │    │ • Data Tables   │
+│ • Document      │    │ • Field Mapping  │    │ • CRUD Ops      │
+│   Structure     │    │ • Data Types     │    │ • Admin UI      │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
@@ -70,6 +70,7 @@ Firestore Document Change
 1. Create JWT token using service account private key
 2. Exchange JWT for OAuth2 access token
 3. Use access token for Firestore REST API calls
+4. Fetch documents and process them synchronously
 
 ### Data Transformation Flow
 
@@ -163,6 +164,8 @@ php artisan firestore:sync users
 php artisan firestore:sync
 ```
 
+**Note**: This is a manual sync process. Run the command whenever you need to update the MySQL database with the latest Firestore data.
+
 ### Access Filament Admin
 
 ```bash
@@ -236,6 +239,8 @@ php artisan firestore:sync users
 # Sync with verbose output
 php artisan firestore:sync users -v
 ```
+
+**Manual Process**: These commands need to be run manually to sync data from Firestore to MySQL.
 
 ### Test Commands
 
@@ -492,5 +497,6 @@ This solution provides a robust, scalable approach to syncing NoSQL data to SQL 
 - Full control over data transformation
 - Beautiful admin interface with Filament
 - Scalable and maintainable architecture
+- Simple manual sync process
 
 The solution can be easily extended to handle other collections and data types, making it a versatile tool for NoSQL-to-SQL synchronization scenarios.
